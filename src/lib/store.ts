@@ -18,3 +18,12 @@ if(browser){
         localStorage.setItem("players", JSON.stringify(value))
     })
 }
+
+const storedTeams = JSON.parse(localStorage.getItem("teams") || JSON.stringify(["Team 1","Team 2"]));
+export const teams = writable(storedTeams);
+if(browser){
+    teams.subscribe(value => {
+        if(value.length > 2) value = [value[0], value[1]];
+        localStorage.setItem("teams", JSON.stringify(value))
+    })
+}

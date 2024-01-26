@@ -2,7 +2,7 @@
     let editMode = false;
     let eventCode = "";
     let events: any[] = [];
-    import {selectedId, players} from "$lib/store"
+    import {selectedId, players, teams} from "$lib/store"
     import { parseEventCode } from "$lib/eventHandler";
 
     const onKeyDown = (e:KeyboardEvent) => {
@@ -13,7 +13,7 @@
 
         //@ts-expect-error
         const targetId: string|undefined = e.target?.id;
-        if(targetId?.includes("player_input")) return editMode=true;
+        if(targetId?.includes("player_input") || targetId?.includes("team_input")) return editMode=true;
         editMode=false;
 
         if(["1","2","3","4","5","6"].includes(e.key)){
@@ -35,7 +35,7 @@
     const onClick = (e:MouseEvent) => {
         //@ts-expect-error
         const targetId: string|undefined = e.target?.id;
-        if(targetId?.includes("player_input")) return editMode=true;
+        if(targetId?.includes("player_input") || targetId?.includes("team_input")) return editMode=true;
         editMode=false;
     }
 
@@ -43,16 +43,29 @@
 
 <svelte:window on:keydown={onKeyDown} on:click={onClick}/>
 <div class="p-3 flex flex-col space-y-5">
-    <div id="players" class="flex space-x-3">
-        {#each [0,1,2,3,4,5] as i}
-        <div class="flex-auto">
-            <div class="outline-dashed">
-                <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$players[i]}>
+    <div class="flex flex-col space-y-2">
+        <div id="teams" class="flex space-x-2">
+            {#each [0,1] as i}
+            <div class="flex-auto">
+                <div class="outline-dashed">
+                    <input class="w-full p-1 {i == 0 ? "bg-blue-400" : "bg-orange-400" }" id="{`team_input_${i}`}" type="text" bind:value={$teams[i]}>
+                </div>
             </div>
+                
+            {/each}
         </div>
-            
-        {/each}
+        <div id="players" class="flex space-x-2">
+            {#each [0,1,2,3,4,5] as i}
+            <div class="flex-auto">
+                <div class="outline-dashed">
+                    <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$players[i]}>
+                </div>
+            </div>
+                
+            {/each}
+        </div>
     </div>
+    
     
     <div class="flex flex-col space-y-2" id="events">
         <div class="outline p-2" id="eventcode">

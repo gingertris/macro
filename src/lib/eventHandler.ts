@@ -1,21 +1,31 @@
 
-export const parseEventCode = (eventCodeString: string, target: number, players: string[]) => {
+export const parseEventCode = (eventCodeString: string, selectedId: number, players: string[]) => {
     eventCodeString = eventCodeString.toLowerCase();
     const eventCode = eventCodeString.split("");
 
     if(eventCode.length === 0) throw new Error("Empty");
 
-    let result;
     switch(eventCode.shift()){
-        case "s":
-            result = handleShot(eventCode, target, players)
-            break;
+        case "s": //shot
+            return handleShot(eventCode, selectedId, players)
+        case "c": //contested hit (challenge, 50/50 etc)
+            return handleContestedHit(eventCode, selectedId, players)
+        case "u": //uncontested hit
+            return handleUncontestedHit(eventCode, selectedId, players)
+
     }
 
-    return result;
 }
 
-const handleShot = (eventCode: string[], target:number, players: string[]) => {
+const handleUncontestedHit = (eventCode: string[], selectedId:number, players:string[]) => {
+
+};
+
+const handleContestedHit = (eventCode: string[], selectedId:number, players:string[]) => {
+
+};
+
+const handleShot = (eventCode: string[], selectedId:number, players: string[]) => {
     const locationCode = eventCode.splice(0,2); //Shot location is two letters long
     
     const successfulCode = eventCode.shift();
@@ -24,7 +34,7 @@ const handleShot = (eventCode: string[], target:number, players: string[]) => {
     else if(successfulCode === "n") successful = false;
     else throw new Error("Invalid success of shot.");
 
-    return {player: players[target], data:{
+    return {player: players[selectedId], data:{
         type:"shot",
         location:locationCode,
         successful
