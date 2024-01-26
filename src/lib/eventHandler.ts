@@ -2,6 +2,9 @@
 export const parseEventCode = (eventCodeString: string, target: number, players: string[]) => {
     eventCodeString = eventCodeString.toLowerCase();
     const eventCode = eventCodeString.split("");
+
+    if(eventCode.length === 0) throw new Error("Empty code");
+
     let result;
     switch(eventCode.shift()){
         case "s":
