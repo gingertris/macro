@@ -9,7 +9,7 @@
 
     const onKeyDown = (e:KeyboardEvent) => {
 
-        if(e.ctrlKey || e.altKey || e.shiftKey || e.code == "Tab") return;
+        if(e.ctrlKey || e.altKey || e.shiftKey || e.metaKey || e.code == "Tab") return;
 
         console.log(e)
 
