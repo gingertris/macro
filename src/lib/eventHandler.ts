@@ -1,7 +1,7 @@
 
-export const parseEventCode = (eventCodeString: string, selectedId: number, players: string[]) => {
-    eventCodeString = eventCodeString.toLowerCase();
-    const eventCode = eventCodeString.split("");
+export const parseEventCode = (eventCode: string[], selectedId: number, players: string[]) => {
+
+    eventCode = eventCode.map(c => c.toLowerCase());
 
     if(eventCode.length === 0) throw new Error("Empty");
 

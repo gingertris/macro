@@ -1,6 +1,6 @@
 <script lang="ts">
     let editMode = false;
-    let eventCode = "";
+    let eventCode: string[] = [];
     let events: any[] = [];
     import {selectedId, players, teams} from "$lib/store"
     import { parseEventCode } from "$lib/eventHandler";
@@ -27,16 +27,16 @@
 
         if(e.key == "Enter"){
             events = [...events, parseEventCode(eventCode, $selectedId, $players)];
-            eventCode = "";
+            eventCode = [];
             return;
         }
 
         if(e.key == "Backspace"){
-            eventCode = eventCode.substring(0, eventCode.length - 1);
+            eventCode = eventCode.slice(0, eventCode.length-1);
             return;
         }
 
-        eventCode += e.key;
+        eventCode = [...eventCode, e.key];
     }
 
     const onClick = (e:MouseEvent) => {
@@ -83,7 +83,7 @@
                 </div>
             {:else}
                 <div>
-                    <p><code>{eventCode}</code></p>
+                    <p><code>{eventCode.join("")}</code></p>
                 </div>
             {/if}
         </div>
