@@ -18,7 +18,7 @@
         if(targetId?.includes("player_input") || targetId?.includes("team_input")) return editMode=true;
         editMode=false;
 
-        if(["1","2","3","4","5","6"].includes(e.key)){
+        if(["1","2","3","4","5","6"].includes(e.key) && eventCode.length == 0){
             selectedId.set(parseInt(e.key) - 1);
             return;
         }
@@ -52,7 +52,7 @@
 <div class="p-3 flex flex-col space-y-5">
     <div class="flex flex-col space-y-2">
         <div id="teams" class="flex space-x-2">
-            {#each [0,1] as i}
+            {#each [...Array(2).keys()] as i}
             <div class="flex-auto">
                 <div class="outline-dashed">
                     <input class="w-full p-1 {i == 0 ? "bg-blue-400" : "bg-orange-400" }" id="{`team_input_${i}`}" type="text" bind:value={$teams[i]}>
@@ -62,7 +62,7 @@
             {/each}
         </div>
         <div id="players" class="flex space-x-2">
-            {#each [0,1,2,3,4,5] as i}
+            {#each [...Array(6).keys()] as i}
             <div class="flex-auto">
                 <div class="outline-dashed">
                     <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$players[i]}>
