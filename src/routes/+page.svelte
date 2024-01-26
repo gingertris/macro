@@ -2,8 +2,7 @@
     let editMode = false;
     let eventCode = "";
     let events: any[] = [];
-    let players: string[] = ["Player 1","Player 2","Player 3","Player 4","Player 5","Player 6"];
-    let selectedId: number = 0;
+    import {selectedId, players} from "$lib/store"
     import { parseEventCode } from "$lib/eventHandler";
 
     const onKeyDown = (e:KeyboardEvent) => {
@@ -18,14 +17,14 @@
         editMode=false;
 
         if(["1","2","3","4","5","6"].includes(e.key)){
-            selectedId = parseInt(e.key) - 1;
+            selectedId.set(parseInt(e.key) - 1);
             return;
         }
 
-        if(["7","8","9","0"].includes(e.key)) return;
+        if(["7","8","9","0","F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.key)) return;
 
         if(e.key == "Enter"){
-            events = [...events, parseEventCode(eventCode, selectedId, players)];
+            events = [...events, parseEventCode(eventCode, $selectedId, $players)];
             eventCode = "";
             return;
         }
@@ -48,7 +47,7 @@
         {#each [0,1,2,3,4,5] as i}
         <div class="flex-auto">
             <div class="outline-dashed">
-                <input class="w-full p-1 {i == selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={players[i]}>
+                <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$players[i]}>
             </div>
         </div>
             

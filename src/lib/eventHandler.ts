@@ -3,7 +3,7 @@ export const parseEventCode = (eventCodeString: string, target: number, players:
     eventCodeString = eventCodeString.toLowerCase();
     const eventCode = eventCodeString.split("");
 
-    if(eventCode.length === 0) throw new Error("Empty code");
+    if(eventCode.length === 0) throw new Error("Empty");
 
     let result;
     switch(eventCode.shift()){
