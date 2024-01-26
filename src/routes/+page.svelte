@@ -9,7 +9,7 @@
 
     const onKeyDown = (e:KeyboardEvent) => {
 
-        if(e.ctrlKey || e.altKey || e.shiftKey || e.metaKey || e.code == "Tab") return;
+        if(e.ctrlKey || e.altKey || e.shiftKey || e.metaKey || e.code == "Tab" || e.code == "Escape") return;
 
         console.log(e)
 
@@ -76,7 +76,17 @@
     
     <div class="flex flex-col space-y-2" id="events">
         <div class="outline p-2" id="eventcode">
-            <h2 class="underline">Current Event Code</h2>
+            <div class="flex flex-row space-x-5">
+                <div>
+                    <h2 class="underline">Current Event Code</h2>
+                </div>
+              
+              {#if !editMode}
+                <div class="text-red-500">Recording Keypresses</div>
+              {/if}
+            </div>
+            
+            
             {#if editMode}
                 <div>
                     Currently editing, not recording keypresses. Click elsewhere to resume recording keypresses.
