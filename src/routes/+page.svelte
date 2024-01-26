@@ -5,6 +5,8 @@
     import {selectedId, players, teams} from "$lib/store"
     import { parseEventCode } from "$lib/eventHandler";
 
+    $: selectedTeamId = $selectedId < 3 ? 0 : 1;
+
     const onKeyDown = (e:KeyboardEvent) => {
 
         if(e.ctrlKey || e.altKey || e.shiftKey || e.code == "Tab") return;
