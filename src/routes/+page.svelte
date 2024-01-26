@@ -1,5 +1,6 @@
 <script lang="ts">
     let editMode = false;
+    let focussed = true;
     let eventCode: string[] = [];
     let events: any[] = [];
     import {selectedId, players, teams} from "$lib/store"
@@ -48,7 +49,7 @@
 
 </script>
 
-<svelte:window on:keydown={onKeyDown} on:click={onClick}/>
+<svelte:window on:keydown={onKeyDown} on:click={onClick} on:focus={() => focussed = true} on:blur={() => focussed=false}/>
 <div class="p-3 flex flex-col space-y-5">
     <div class="flex flex-col space-y-2">
         <div id="teams" class="flex space-x-2">
@@ -81,17 +82,18 @@
                     <h2 class="underline">Current Event Code</h2>
                 </div>
               
-              {#if !editMode}
+              {#if !editMode && focussed}
                 <div class="text-red-500">Recording Keypresses</div>
+              {/if}
+              {#if editMode && focussed}
+              <div class="text-gray-400">
+                  Currently editing, not recording keypresses. Click elsewhere to resume recording keypresses.
+              </div>
               {/if}
             </div>
             
             
-            {#if editMode}
-                <div>
-                    Currently editing, not recording keypresses. Click elsewhere to resume recording keypresses.
-                </div>
-            {:else}
+            {#if !editMode}
                 <div>
                     <p><code>{eventCode.join("")}</code></p>
                 </div>
