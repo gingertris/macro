@@ -31,6 +31,11 @@
             return;
         }
 
+        if(e.key == "Backspace"){
+            eventCode = eventCode.substring(0, eventCode.length - 1);
+            return;
+        }
+
         eventCode += e.key;
     }
 
