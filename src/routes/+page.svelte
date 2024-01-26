@@ -22,6 +22,8 @@
             return;
         }
 
+        if(["7","8","9","0"].includes(e.key)) return;
+
         if(e.key == "Enter"){
             events = [...events, parseEventCode(eventCode, selectedId, players)];
             eventCode = "";
