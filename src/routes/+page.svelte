@@ -1,18 +1,22 @@
 <script lang="ts">
     let editMode = false;
+    let automatic = false;
     let focussed = true;
     let eventCode: string[] = [];
     let events: any[] = [];
+
+    let ws: WebSocket;
+
+
     import {selectedId, players, teams} from "$lib/store"
     import { parseEventCode } from "$lib/eventHandler";
+	import { onMount } from "svelte";
 
     $: selectedTeamId = $selectedId < 3 ? 0 : 1;
 
     const onKeyDown = (e:KeyboardEvent) => {
 
         if(e.ctrlKey || e.altKey || e.shiftKey || e.metaKey || e.code == "Tab" || e.code == "Escape") return;
-
-        console.log(e)
 
         //@ts-expect-error
         const targetId: string|undefined = e.target?.id;
@@ -46,6 +50,28 @@
         if(targetId?.includes("player_input") || targetId?.includes("team_input")) return editMode=true;
         editMode=false;
     }
+
+    onMount(() => {
+        open("ws://localhost:49122")
+    })
+
+    const open = (uri: string) => {
+        ws = new WebSocket(uri);
+        ws.onopen = () => {
+            console.log("ws opened");
+        }
+        ws.onmessage = (e) => {
+            console.log(JSON.parse(e.data.toString()))
+        }
+        ws.onclose = (e) => {
+            console.log("attempting reconnect");
+            setTimeout(() => open(uri), 1000);
+        }
+        ws.onerror = (e) => {
+            console.log("ws error, closing");
+        }
+    }
+
 
 </script>
 
