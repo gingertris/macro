@@ -36,7 +36,7 @@
 
         if(e.key == "Enter"){
             console.log(SOSPlayerData[$selectedId])
-            events = [...events, parseEventCode(eventCode, $selectedId, $customPlayerNames)];
+            events = [...events, parseEventCode(eventCode, SOSPlayerData[$selectedId])];
             eventCode = [];
             return;
         }
