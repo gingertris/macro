@@ -1,12 +1,15 @@
 <script lang="ts">
     let editMode = false;
     let automatic = false;
+    let connected = false;
     let focussed = true;
     let eventCode: string[] = [];
     let events: any[] = [];
+    let gameState: any = null;
 
     let ws: WebSocket;
 
+    $: if(!connected || !gameState) automatic = false;
 
     import {selectedId, players, teams} from "$lib/store"
     import { parseEventCode } from "$lib/eventHandler";
@@ -55,49 +58,112 @@
         open("ws://localhost:49122")
     })
 
+    const handleSOSMessage  = (msg: any) => {
+        //console.log(msg)
+        switch(msg.event){
+            case "game:update_state":
+                gameState = msg.data;
+                break;
+            case "game:match_destroyed":
+                gameState = null;
+        }
+    }
+
     const open = (uri: string) => {
         ws = new WebSocket(uri);
         ws.onopen = () => {
             console.log("ws opened");
+            connected = true;
         }
         ws.onmessage = (e) => {
-            console.log(JSON.parse(e.data.toString()))
+            handleSOSMessage(JSON.parse(e.data.toString()))
         }
         ws.onclose = (e) => {
+            connected = false;
             console.log("attempting reconnect");
             setTimeout(() => open(uri), 1000);
         }
         ws.onerror = (e) => {
+            connected = false;
             console.log("ws error, closing");
         }
     }
+
+    const handleAutomaticChange = (e: Event) => {
+      if(automatic){
+            //populate name entries
+            console.log(gameState)
+            const playerData = [];
+            for(const player in gameState.players){
+                playerData.push(gameState.players[player]);
+            }
+
+            for(let [index, value] of playerData.entries()){
+                $players[index] = value.name;
+            }
+
+            //populate team entries
+            const teamData = [];
+
+            for(let [index, value] of gameState.game.teams.entries()){
+                $teams[index] = value.name;
+            }
+        }  
+    } 
 
 
 </script>
 
 <svelte:window on:keydown={onKeyDown} on:click={onClick} on:focus={() => focussed = true} on:blur={() => focussed=false}/>
 <div class="p-3 flex flex-col space-y-5">
-    <div class="flex flex-col space-y-2">
-        <div id="teams" class="flex space-x-2">
-            {#each [...Array(2).keys()] as i}
-            <div class="flex-auto">
-                <div class="outline-dashed">
-                    <input class="w-full p-1 {i == 0 ? "bg-blue-400" : "bg-orange-400" }" id="{`team_input_${i}`}" type="text" bind:value={$teams[i]}>
+    <div class="grid grid-flow-col space-x-2">
+        <div class="flex flex-col space-y-2">
+            <div id="teams" class="flex space-x-2">
+                {#each [...Array(2).keys()] as i}
+                <div class="flex-auto">
+                    <div class="outline-dashed">
+                        <input class="w-full p-1 {i == 0 ? "bg-blue-400" : "bg-orange-400" }" id="{`team_input_${i}`}" type="text" bind:value={$teams[i]}>
+                    </div>
                 </div>
+                    
+                {/each}
             </div>
-                
-            {/each}
-        </div>
-        <div id="players" class="flex space-x-2">
-            {#each [...Array(6).keys()] as i}
-            <div class="flex-auto">
-                <div class="outline-dashed">
-                    <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$players[i]}>
+            <div id="players" class="flex space-x-2">
+                {#each [...Array(6).keys()] as i}
+                <div class="flex-auto">
+                    <div class="outline-dashed">
+                        <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$players[i]}>
+                    </div>
                 </div>
+                    
+                {/each}
             </div>
-                
-            {/each}
         </div>
+
+        <div class="justify-self-end p-2">
+            {#if connected}
+            <p class="text-green-400">Connected to SOS!</p>
+
+            {#if !!gameState}
+                <p>
+                    
+                    <label>
+                        <input type="checkbox" bind:checked={automatic} on:change={handleAutomaticChange}/>
+                        Automatic Mode (additional information)
+                    </label>
+                </p>
+            {:else}
+                <p>
+                    Waiting for replay.
+                </p>
+            {/if}
+
+            {:else}
+            <span class="text-red-500">Couldn't connect to SOS. Is it running?</span>
+            {/if}
+            
+        </div>
+
     </div>
     
     
