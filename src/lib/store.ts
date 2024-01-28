@@ -1,4 +1,4 @@
-import { writable } from "svelte/store";
+import { writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 
 
@@ -11,10 +11,10 @@ if(browser){
     })
 }
 
-const storedPlayers = JSON.parse(localStorage.getItem("players") || JSON.stringify(["Player 1","Player 2","Player 3","Player 4","Player 5","Player 6"]));
-export const players = writable(storedPlayers);
+const storedCustomPlayerNames = JSON.parse(localStorage.getItem("players") || JSON.stringify(["Player 1","Player 2","Player 3","Player 4","Player 5","Player 6"]));
+export const customPlayerNames = writable(storedCustomPlayerNames);
 if(browser){
-    players.subscribe(value => {
+    customPlayerNames.subscribe(value => {
         localStorage.setItem("players", JSON.stringify(value))
     })
 }
@@ -27,3 +27,5 @@ if(browser){
         localStorage.setItem("teams", JSON.stringify(value))
     })
 }
+
+export const gameState: Writable<any> = writable(null);

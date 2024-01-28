@@ -5,17 +5,18 @@
     let focussed = true;
     let eventCode: string[] = [];
     let events: any[] = [];
-    let gameState: any = null;
+    let SOSPlayerData: any[] = [];
 
     let ws: WebSocket;
 
-    $: if(!connected || !gameState) automatic = false;
+    
 
-    import {selectedId, players, teams} from "$lib/store"
+    import {selectedId, customPlayerNames, teams, gameState} from "$lib/store"
     import { parseEventCode } from "$lib/eventHandler";
 	import { onMount } from "svelte";
 
     $: selectedTeamId = $selectedId < 3 ? 0 : 1;
+    $: if(!connected || !$gameState) automatic = false;
 
     const onKeyDown = (e:KeyboardEvent) => {
 
@@ -34,7 +35,8 @@
         if(["7","8","9","0","F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.key)) return;
 
         if(e.key == "Enter"){
-            events = [...events, parseEventCode(eventCode, $selectedId, $players)];
+            console.log(SOSPlayerData[$selectedId])
+            events = [...events, parseEventCode(eventCode, $selectedId, $customPlayerNames)];
             eventCode = [];
             return;
         }
@@ -62,10 +64,10 @@
         //console.log(msg)
         switch(msg.event){
             case "game:update_state":
-                gameState = msg.data;
+                $gameState = msg.data;
                 break;
             case "game:match_destroyed":
-                gameState = null;
+                $gameState = null;
         }
     }
 
@@ -92,20 +94,22 @@
     const handleAutomaticChange = (e: Event) => {
       if(automatic){
             //populate name entries
-            console.log(gameState)
+            console.log($gameState)
             const playerData = [];
-            for(const player in gameState.players){
-                playerData.push(gameState.players[player]);
+            for(const player in $gameState.players){
+                playerData.push($gameState.players[player]);
             }
+            console.log(playerData)
+            playerData.sort((a, b) => a.team - b.team)
+
 
             for(let [index, value] of playerData.entries()){
-                $players[index] = value.name;
+                $customPlayerNames[index] = value.name;
+                SOSPlayerData[index] = value
             }
 
             //populate team entries
-            const teamData = [];
-
-            for(let [index, value] of gameState.game.teams.entries()){
+            for(let [index, value] of $gameState.game.teams.entries()){
                 $teams[index] = value.name;
             }
         }  
@@ -132,7 +136,7 @@
                 {#each [...Array(6).keys()] as i}
                 <div class="flex-auto">
                     <div class="outline-dashed">
-                        <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$players[i]}>
+                        <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$customPlayerNames[i]}>
                     </div>
                 </div>
                     
@@ -144,7 +148,7 @@
             {#if connected}
             <p class="text-green-400">Connected to SOS!</p>
 
-            {#if !!gameState}
+            {#if !!$gameState}
                 <p>
                     
                     <label>
