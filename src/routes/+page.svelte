@@ -1,6 +1,5 @@
 <script lang="ts">
     let editMode = false;
-    let automatic = false;
     let connected = false;
     let focussed = true;
     let eventCode: string[] = [];
@@ -11,12 +10,11 @@
 
     
 
-    import {selectedId, customPlayerNames, teams, gameState} from "$lib/store"
+    import {selectedId, customPlayerNames, customTeamNames, gameState} from "$lib/store"
     import { parseEventCode } from "$lib/eventHandler";
 	import { onMount } from "svelte";
 
     $: selectedTeamId = $selectedId < 3 ? 0 : 1;
-    $: if(!connected || !$gameState) automatic = false;
 
     const onKeyDown = (e:KeyboardEvent) => {
 
@@ -27,10 +25,13 @@
         if(targetId?.includes("player_input") || targetId?.includes("team_input")) return editMode=true;
         editMode=false;
 
+
         if(["1","2","3","4","5","6"].includes(e.key) && eventCode.length == 0){
             selectedId.set(parseInt(e.key) - 1);
             return;
         }
+
+        if(!$gameState) return;
 
         if(["7","8","9","0","F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.key)) return;
 
@@ -60,11 +61,21 @@
         open("ws://localhost:49122")
     })
 
+    const updateSOSPlayerData = () => {
+        const playerData = [];
+        for(const player in $gameState.players){
+            playerData.push($gameState.players[player]);
+        }
+        playerData.sort((a, b) => a.team - b.team);
+        SOSPlayerData = playerData;
+    }
+
     const handleSOSMessage  = (msg: any) => {
         //console.log(msg)
         switch(msg.event){
             case "game:update_state":
                 $gameState = msg.data;
+                updateSOSPlayerData();
                 break;
             case "game:match_destroyed":
                 $gameState = null;
@@ -91,28 +102,20 @@
         }
     }
 
-    const handleAutomaticChange = (e: Event) => {
-      if(automatic){
-            //populate name entries
-            console.log($gameState)
-            const playerData = [];
-            for(const player in $gameState.players){
-                playerData.push($gameState.players[player]);
-            }
-            console.log(playerData)
-            playerData.sort((a, b) => a.team - b.team)
+    const handleSOSSync = (e: Event) => {
+        //populate name entries
+        console.log($gameState);
+        updateSOSPlayerData();
+        
+        for(let [index, value] of SOSPlayerData.entries()){
+            $customPlayerNames[index] = value.name;
+        }
 
+        //populate team entries
+        for(let [index, value] of $gameState.game.teams.entries()){
+            $customTeamNames[index] = value.name;
+        }
 
-            for(let [index, value] of playerData.entries()){
-                $customPlayerNames[index] = value.name;
-                SOSPlayerData[index] = value
-            }
-
-            //populate team entries
-            for(let [index, value] of $gameState.game.teams.entries()){
-                $teams[index] = value.name;
-            }
-        }  
     } 
 
 
@@ -126,7 +129,7 @@
                 {#each [...Array(2).keys()] as i}
                 <div class="flex-auto">
                     <div class="outline-dashed">
-                        <input class="w-full p-1 {i == 0 ? "bg-blue-400" : "bg-orange-400" }" id="{`team_input_${i}`}" type="text" bind:value={$teams[i]}>
+                        <input class="w-full p-1 {i == 0 ? "bg-blue-400" : "bg-orange-400" }" id="{`team_input_${i}`}" type="text" bind:value={$customTeamNames[i]}>
                     </div>
                 </div>
                     
@@ -144,7 +147,7 @@
             </div>
         </div>
 
-        <div class="justify-self-end p-2">
+        <div class="justify-self-end space-y-2">
             {#if connected}
             <p class="text-green-400">Connected to SOS!</p>
 
@@ -152,8 +155,7 @@
                 <p>
                     
                     <label>
-                        <input type="checkbox" bind:checked={automatic} on:change={handleAutomaticChange}/>
-                        Automatic Mode (additional information)
+                        <button on:click={handleSOSSync} class="bg-slate-200 hover:bg-slate-300 rounded-md p-2">Sync Names</button> 
                     </label>
                 </p>
             {:else}
@@ -178,13 +180,18 @@
                     <h2 class="underline">Current Event Code</h2>
                 </div>
               
-              {#if !editMode && focussed}
+              {#if !editMode && focussed && !!$gameState}
                 <div class="text-red-500">Recording Keypresses</div>
               {/if}
               {#if editMode && focussed}
               <div class="text-gray-400">
                   Currently editing, not recording keypresses. Click elsewhere to resume recording keypresses.
               </div>
+              {/if}
+              {#if !$gameState}
+                <div class="text-gray-400">
+                    Cannot record macros - no game state was found. Please launch a replay file with SOS enabled.
+                </div>
               {/if}
             </div>
             

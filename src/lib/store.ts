@@ -12,17 +12,17 @@ if(browser){
 }
 
 const storedCustomPlayerNames = JSON.parse(localStorage.getItem("players") || JSON.stringify(["Player 1","Player 2","Player 3","Player 4","Player 5","Player 6"]));
-export const customPlayerNames = writable(storedCustomPlayerNames);
+export const customPlayerNames: Writable<string[]> = writable(storedCustomPlayerNames);
 if(browser){
     customPlayerNames.subscribe(value => {
         localStorage.setItem("players", JSON.stringify(value))
     })
 }
 
-const storedTeams = JSON.parse(localStorage.getItem("teams") || JSON.stringify(["Team 1","Team 2"]));
-export const teams = writable(storedTeams);
+const storedCustomTeamNames = JSON.parse(localStorage.getItem("teams") || JSON.stringify(["Team 1","Team 2"]));
+export const customTeamNames: Writable<string[]> = writable(storedCustomTeamNames);
 if(browser){
-    teams.subscribe(value => {
+    customTeamNames.subscribe(value => {
         if(value.length > 2) value = [value[0], value[1]];
         localStorage.setItem("teams", JSON.stringify(value))
     })
