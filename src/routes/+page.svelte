@@ -94,6 +94,7 @@
         ws.onclose = (e) => {
             connected = false;
             console.log("attempting reconnect");
+            $gameState = null;
             setTimeout(() => open(uri), 1000);
         }
         ws.onerror = (e) => {

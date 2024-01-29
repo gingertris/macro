@@ -1,4 +1,4 @@
-import { customPlayerNames, customTeamNames, selectedId } from "./store";
+import { customPlayerNames, customTeamNames, gameState, selectedId } from "./store";
 import { get } from "svelte/store";
 
 export const parseEventCode = (eventCode: string[], playerData: any) => {
@@ -6,17 +6,25 @@ export const parseEventCode = (eventCode: string[], playerData: any) => {
     const $customPlayerNames = get(customPlayerNames);
     const $customTeamNames = get(customTeamNames);
     const $selectedId = get(selectedId);
+    const $gameState = get(gameState)
 
-    const [myTeamName, opponentTeamName] = $selectedId < 3 ? $customTeamNames : $customTeamNames.reverse();
 
-    console.log(playerData)
+    const [myTeamName, opponentTeamName] = $selectedId < 3 ? $customTeamNames : $customTeamNames.toReversed();
+
+    console.log($gameState)
 
     return {
         team: myTeamName,
         opponent: opponentTeamName,
         player: $customPlayerNames[$selectedId],
         boost: playerData.boost,
-        location: playerData.location
+        location: {
+            x: playerData.location.X,
+            y: playerData.location.Y,
+            z: playerData.location.Z
+
+        },
+        timestamp: $gameState.game.elapsed
     }
 
     eventCode = eventCode.map(c => c.toLowerCase());
