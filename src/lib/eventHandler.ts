@@ -27,6 +27,8 @@ export const parseEventCode = (eventCode: string[], playerData: any) => {
         timestamp: $gameState.game.elapsed
     }
 
+    //below this is old code, above is proof of concept code
+
     eventCode = eventCode.map(c => c.toLowerCase());
 
     if(eventCode.length === 0) throw new Error("Empty");
