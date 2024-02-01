@@ -150,7 +150,7 @@
     } 
 
     const handleSaveEvents = () => {
-        let content = [["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z"]];
+        let content = [["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"]];
         for (let event of events){
             content.push(event.generateCSV());
         }

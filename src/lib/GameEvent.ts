@@ -92,7 +92,7 @@ export class GameEvent {
         } else if (this.event === "Challenge (50/50)"){
             secondaryArray = [(this.secondary as string),,,]
         }
-        return [team, opponentTeam, this.player.name, this.player.boost, this.player.location.X, this.player.location.Y, this.player.location.Z, this.event, this.outcome, ...secondaryArray]
+        return [team, opponentTeam, this.player.name, this.player.boost, this.player.location.X, this.player.location.Y, this.player.location.Z, this.event, this.outcome, ...secondaryArray, this.timestamp]
     }
 
     private _getTeamNames (playerId: number) {
