@@ -1,18 +1,20 @@
 <script lang="ts">
+
+    import {selectedId, customPlayerNames, customTeamNames, gameState} from "$lib/store"
+    import { GameEvent } from "$lib/GameEvent";
+	import { onMount } from "svelte";
+	import type { Player } from "$lib/types";
+
     let editMode = false;
     let connected = false;
     let focussed = true;
     let eventCode: string[] = [];
-    let events: any[] = [];
-    let SOSPlayerData: any[] = [];
+    let events: GameEvent[] = []
+    let currentEvent: GameEvent | null = null;
+    let waitingForSecondary = false;
+    let SOSPlayerData: Player[] = [];
 
     let ws: WebSocket;
-
-    
-
-    import {selectedId, customPlayerNames, customTeamNames, gameState} from "$lib/store"
-    import { parseEventCode } from "$lib/eventHandler";
-	import { onMount } from "svelte";
 
     $: selectedTeamId = $selectedId < 3 ? 0 : 1;
 
@@ -36,10 +38,28 @@
         if(["7","8","9","0","F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.key)) return;
 
         if(e.key == "Enter"){
-            console.log(SOSPlayerData[$selectedId])
-            events = [...events, parseEventCode(eventCode, SOSPlayerData[$selectedId])];
-            eventCode = [];
-            return;
+            if(!waitingForSecondary){
+                
+                currentEvent = new GameEvent(eventCode, SOSPlayerData);
+                if(!currentEvent.needsSecondary){
+                    events = [...events, currentEvent];
+                    eventCode = [];
+                    return;      
+                } else {
+                    waitingForSecondary = true;
+                    return;
+                }
+            } else{
+                if(!currentEvent){
+                    waitingForSecondary = false;
+                    return;
+                }
+                currentEvent.setSecondary(SOSPlayerData[$selectedId].location);
+                events = [...events, currentEvent];
+                eventCode = [];
+                waitingForSecondary = false;
+                return;      
+            }
         }
 
         if(e.key == "Backspace"){
@@ -62,16 +82,26 @@
     })
 
     const updateSOSPlayerData = () => {
-        const playerData = [];
+        const playerData: Player[] = [];
         for(const player in $gameState.players){
-            playerData.push($gameState.players[player]);
+            const p: Player = {
+                name: $gameState.players[player].name,
+                location: {
+                    X: $gameState.players[player].location.X,
+                    Y: $gameState.players[player].location.Y,
+                    Z: $gameState.players[player].location.Z
+                },
+                boost: $gameState.players[player].boost,
+                team: $gameState.players[player].team
+            }
+            playerData.push(p);
         }
         playerData.sort((a, b) => a.team - b.team);
         SOSPlayerData = playerData;
     }
 
     const handleSOSMessage  = (msg: any) => {
-        //console.log(msg)
+        console.log(msg)
         switch(msg.event){
             case "game:update_state":
                 $gameState = msg.data;
@@ -183,6 +213,9 @@
               
               {#if !editMode && focussed && !!$gameState}
                 <div class="text-red-500">Recording Keypresses</div>
+                {#if waitingForSecondary}
+                <div class="text-gray-400">Waiting for secondary enter</div>
+                {/if}
               {/if}
               {#if editMode && focussed}
               <div class="text-gray-400">
@@ -211,7 +244,7 @@
             {#each events as event}
                 <div>
                     <code>
-                        {JSON.stringify(event, null, 2)}
+                        {JSON.stringify(event.outputJSON(), null, 2)}
                     </code>
                     
                 </div>
