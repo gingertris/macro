@@ -4,8 +4,7 @@
     import { GameEvent } from "$lib/GameEvent";
 	import { onMount } from "svelte";
 	import type { Player } from "$lib/types";
-	import Button from "$lib/Button.svelte";
-
+	
     let editMode = false;
     let connected = false;
     let focussed = true;
@@ -265,7 +264,7 @@
             {#each events as event}
                 <div>
                     <code>
-                        {JSON.stringify(event.outputJSON(), null, 2)}
+                        Team name:{event.generateCSV().join("")}
                     </code>
                     
                 </div>

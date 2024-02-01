@@ -9,7 +9,7 @@ export class GameEvent {
     private customTeamNames: string[];
     private selectedId: number;
     private gameState: any;
-    private eventCode: string[];
+    eventCode: string[];
     private player: Player;
     private secondary?: Location | string;
     private event: string;
