@@ -260,7 +260,7 @@
                     <button class="bg-slate-200 hover:bg-slate-300 rounded-md p-2" on:click={() => events = []}>Clear Events</button>
                 </div>
             </div>
-            <table class="w-full ">
+            <table class="w-full text-center">
                 <tr>
                     {#each ["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"] as header}
                         <th>{header}</th>
@@ -270,7 +270,7 @@
                 {#each events as event}
                     <tr>
                         {#each event.generateArray() as col}
-                            <td>{col ?? "N/A"}</td>
+                            <td>{!isNaN(col) ? Math.round(col *100) / 100 : (col ?? "N/A")}</td>
                         {/each}
                     </tr>
                 {/each}

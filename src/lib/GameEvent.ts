@@ -52,7 +52,7 @@ export class GameEvent {
         //is secondary needed
         if(eventCode[0] === "c"){ //if 50/50 get other player name
             if(eventCode[2]){
-                const secondaryPlayerId: number = parseInt(eventCode[2]);
+                const secondaryPlayerId: number = parseInt(eventCode[2]) - 1;
                 this.secondary = this.customPlayerNames[secondaryPlayerId];
             } else{
                 throw new Error(`Secondary for event ${eventCode} not found in code.`)
