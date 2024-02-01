@@ -81,6 +81,20 @@ export class GameEvent {
 
     }
 
+
+    //["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z"]
+    generateCSV(){
+        const [team, opponentTeam] = this._getTeamNames(this.selectedId);
+        
+        let secondaryArray: any = [];
+        if(this.event === "Uncontested play"){
+            secondaryArray = [, (this.secondary as Location).X, (this.secondary as Location).Y, (this.secondary as Location).Z]
+        } else if (this.event === "Challenge (50/50)"){
+            secondaryArray = [(this.secondary as string),,,]
+        }
+        return [team, opponentTeam, this.player.name, this.player.boost, this.player.location.X, this.player.location.Y, this.player.location.Z, this.event, this.outcome, ...secondaryArray]
+    }
+
     private _getTeamNames (playerId: number) {
         return this.selectedId < 3 ? this.customTeamNames : this.customTeamNames.toReversed();
     }

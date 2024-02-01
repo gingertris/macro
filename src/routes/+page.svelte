@@ -4,6 +4,7 @@
     import { GameEvent } from "$lib/GameEvent";
 	import { onMount } from "svelte";
 	import type { Player } from "$lib/types";
+	import Button from "$lib/Button.svelte";
 
     let editMode = false;
     let connected = false;
@@ -101,7 +102,6 @@
     }
 
     const handleSOSMessage  = (msg: any) => {
-        console.log(msg)
         switch(msg.event){
             case "game:update_state":
                 $gameState = msg.data;
@@ -149,6 +149,23 @@
 
     } 
 
+    const handleSaveEvents = () => {
+        let content = [["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z"]];
+        for (let event of events){
+            content.push(event.generateCSV());
+        }
+        let string = content.map(line => line.join(",")).join("\n");
+        const file = new File([string], "stats.csv");
+        const url = window.URL.createObjectURL(file);
+        const a = document.createElement("a");
+        a.href=url;
+        a.download=file.name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }
+
 
 </script>
 
@@ -184,10 +201,7 @@
 
             {#if !!$gameState}
                 <p>
-                    
-                    <label>
-                        <button on:click={handleSOSSync} class="bg-slate-200 hover:bg-slate-300 rounded-md p-2">Sync Names</button> 
-                    </label>
+                    <button class="bg-slate-200 hover:bg-slate-300 rounded-md p-2" on:click={handleSOSSync}>Sync Names</button> 
                 </p>
             {:else}
                 <p>
@@ -240,7 +254,14 @@
         
         
         <div class="outline p-2" id="eventlog">
-            <h2 class="underline">Event Log</h2>
+            <div class="flex flex-row space-x-5 justify-between">
+                <h2 class="underline">Event Log</h2>
+                <div>
+                    <button class="bg-green-200 hover:bg-green-300 rounded-md p-2" on:click={handleSaveEvents}>Save Events</button>
+                    <button class="bg-slate-200 hover:bg-slate-300 rounded-md p-2" on:click={() => events = []}>Clear Events</button>
+                </div>
+            </div>
+            
             {#each events as event}
                 <div>
                     <code>
