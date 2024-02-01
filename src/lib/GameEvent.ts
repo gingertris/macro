@@ -9,7 +9,7 @@ export class GameEvent {
     private customTeamNames: string[];
     private selectedId: number;
     private gameState: any;
-    eventCode: string[];
+     eventCode: string[];
     private player: Player;
     private secondary?: Location | string;
     private event: string;
@@ -25,7 +25,8 @@ export class GameEvent {
         this.eventCode = eventCode;
         this.player = SOSPlayerData[this.selectedId];
         this.needsSecondary = false;
-        this.timestamp = this.gameState.elapsed;
+        this.timestamp = this.gameState.game.elapsed;
+  
 
         //overwrite SOS name with custom name
         this.player.name = this.customPlayerNames[this.selectedId];
@@ -83,14 +84,14 @@ export class GameEvent {
 
 
     //["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z"]
-    generateCSV(){
+    generateArray(){
         const [team, opponentTeam] = this._getTeamNames(this.selectedId);
         
-        let secondaryArray: any = [];
+        let secondaryArray: any = [null,null,null,null];
         if(this.event === "Uncontested play"){
             secondaryArray = [, (this.secondary as Location).X, (this.secondary as Location).Y, (this.secondary as Location).Z]
         } else if (this.event === "Challenge (50/50)"){
-            secondaryArray = [(this.secondary as string),,,]
+            secondaryArray = [(this.secondary as string),null,null,null]
         }
         return [team, opponentTeam, this.player.name, this.player.boost, this.player.location.X, this.player.location.Y, this.player.location.Z, this.event, this.outcome, ...secondaryArray, this.timestamp]
     }

@@ -151,7 +151,7 @@
     const handleSaveEvents = () => {
         let content = [["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"]];
         for (let event of events){
-            content.push(event.generateCSV());
+            content.push(event.generateArray());
         }
         let string = content.map(line => line.join(",")).join("\n");
         const file = new File([string], "stats.csv");
@@ -260,15 +260,22 @@
                     <button class="bg-slate-200 hover:bg-slate-300 rounded-md p-2" on:click={() => events = []}>Clear Events</button>
                 </div>
             </div>
-            
-            {#each events as event}
-                <div>
-                    <code>
-                        Team name:{event.generateCSV().join("")}
-                    </code>
+            <table class="w-full ">
+                <tr>
+                    {#each ["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"] as header}
+                        <th>{header}</th>
+                    {/each}
                     
-                </div>
-            {/each}
+                </tr>
+                {#each events as event}
+                    <tr>
+                        {#each event.generateArray() as col}
+                            <td>{col ?? "N/A"}</td>
+                        {/each}
+                    </tr>
+                {/each}
+            </table>
+
         </div>
     </div>
     
