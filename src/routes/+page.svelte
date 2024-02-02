@@ -201,7 +201,7 @@
                     <button class="bg-slate-200 hover:bg-slate-300 text-mybackground text-sm rounded-sm p-2" on:click={handleSOSSync}>Sync Names</button> 
                 </p>
             {:else}
-                <p>
+                <p class="text-mytext">
                     Waiting for replay.
                 </p>
             {/if}
