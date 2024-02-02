@@ -213,9 +213,7 @@
         </div>
 
     </div>
-    
-    <hr>
-    
+  
     <div class="flex flex-col space-y-5 text-sm text-mytext" id="events">
         <div class="rounded-sm p-2" id="eventcode">
             <div class="flex flex-row space-x-5 ">
