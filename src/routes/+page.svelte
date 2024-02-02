@@ -168,7 +168,7 @@
 
 <svelte:window on:keydown={onKeyDown} on:click={onClick} on:focus={() => focussed = true} on:blur={() => focussed=false} />
 <div class="p-3 flex flex-col space-y-5 ">
-    <div class="grid grid-flow-col space-x-2">
+    <div class="grid grid-flow-col space-x-5">
         <div class="flex flex-col space-y-2">
             <div id="teams" class="flex space-x-2">
                 {#each [...Array(2).keys()] as i}
