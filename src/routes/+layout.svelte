@@ -5,6 +5,4 @@
 <svelte:head>
     <title>Macro</title>
 </svelte:head>
-<slot>
-
-</slot>
+<slot />
