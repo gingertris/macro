@@ -218,7 +218,7 @@
         <div class="rounded-sm p-2" id="eventcode">
             <div class="flex flex-row space-x-5 ">
                 <div>
-                    <h2 class="underline text-myblue text-xl">Current Event Code</h2>
+                    <h2 class="text-myblue text-xl">Current Event Code</h2>
                 </div>
               
               {#if !editMode && focussed && !!$gameState}
@@ -251,7 +251,7 @@
 
         <div class="p-2 space-y-4 outline-myblue" id="eventlog">
             <div class="flex flex-row space-x-5 justify-between text-mytext">
-                <h2 class="underline text-myblue text-xl">Event Log</h2>
+                <h2 class="text-myblue text-xl">Event Log</h2>
                 <div>
                     <button class="bg-myblue hover:bg-blue-400 text-mybackground rounded-sm p-2" on:click={handleSaveEvents}>Save Events</button>
                     <button class="bg-slate-200 hover:bg-slate-300 text-mybackground rounded-sm p-2" on:click={() => events = []}>Clear Events</button>
