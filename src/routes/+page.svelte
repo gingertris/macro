@@ -270,7 +270,7 @@
                 {#each events as event}
                     <tr>
                         {#each event.generateArray() as col}
-                            <td>{col ? `${!isNaN(col) ? Math.round(col *100) / 100 : col}` : "N/A"}</td>
+                            <td>{col === null || col === undefined ? "N/A" : (!isNaN(col) ? Math.round(col*100)/100 : col)}</td>
                         {/each}
                     </tr>
                 {/each}
