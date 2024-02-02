@@ -2,7 +2,18 @@
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        mybackground: '#272729',
+        myblue: '#6ac3f2',
+        mypink: '#e986ae',
+        mytext: '#e7e7e7'
+      },
+      fontFamily: {
+        display: 'Fira Code VF'
+      }
+    }
+    
   },
   plugins: [],
 }

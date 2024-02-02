@@ -166,15 +166,15 @@
 
 </script>
 
-<svelte:window on:keydown={onKeyDown} on:click={onClick} on:focus={() => focussed = true} on:blur={() => focussed=false}/>
-<div class="p-3 flex flex-col space-y-5">
+<svelte:window on:keydown={onKeyDown} on:click={onClick} on:focus={() => focussed = true} on:blur={() => focussed=false} />
+<div class="p-3 flex flex-col space-y-5 ">
     <div class="grid grid-flow-col space-x-2">
         <div class="flex flex-col space-y-2">
             <div id="teams" class="flex space-x-2">
                 {#each [...Array(2).keys()] as i}
                 <div class="flex-auto">
-                    <div class="outline-dashed">
-                        <input class="w-full p-1 {i == 0 ? "bg-blue-400" : "bg-orange-400" }" id="{`team_input_${i}`}" type="text" bind:value={$customTeamNames[i]}>
+                    <div>
+                        <input class="w-full border-b bg-transparent p-1 {i == 0 ? "text-myblue" : "text-mypink" }" id="{`team_input_${i}`}" type="text" bind:value={$customTeamNames[i]}>
                     </div>
                 </div>
                     
@@ -183,8 +183,8 @@
             <div id="players" class="flex space-x-2">
                 {#each [...Array(6).keys()] as i}
                 <div class="flex-auto">
-                    <div class="outline-dashed">
-                        <input class="w-full p-1 {i == $selectedId ? "bg-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$customPlayerNames[i]}>
+                    <div class="text-mytext">
+                        <input class="w-full border-b bg-transparent p-1 {i == $selectedId ? "border-green-400 text-green-400" : "" }" id="{`player_input_${i}`}" type="text" bind:value={$customPlayerNames[i]}>
                     </div>
                 </div>
                     
@@ -198,7 +198,7 @@
 
             {#if !!$gameState}
                 <p>
-                    <button class="bg-slate-200 hover:bg-slate-300 rounded-md p-2" on:click={handleSOSSync}>Sync Names</button> 
+                    <button class="bg-slate-200 hover:bg-slate-300 rounded-sm p-2" on:click={handleSOSSync}>Sync Names</button> 
                 </p>
             {:else}
                 <p>
@@ -214,12 +214,13 @@
 
     </div>
     
+    <hr>
     
-    <div class="flex flex-col space-y-2" id="events">
-        <div class="outline p-2" id="eventcode">
-            <div class="flex flex-row space-x-5">
+    <div class="flex flex-col space-y-5 text-sm text-mytext" id="events">
+        <div class="rounded-sm p-2" id="eventcode">
+            <div class="flex flex-row space-x-5 ">
                 <div>
-                    <h2 class="underline">Current Event Code</h2>
+                    <h2 class="underline text-myblue text-xl">Current Event Code</h2>
                 </div>
               
               {#if !editMode && focussed && !!$gameState}
@@ -248,27 +249,27 @@
             {/if}
         </div>
         
-        
-        
-        <div class="outline p-2" id="eventlog">
-            <div class="flex flex-row space-x-5 justify-between">
-                <h2 class="underline">Event Log</h2>
+        <hr>
+
+        <div class="p-2 space-y-4 outline-myblue" id="eventlog">
+            <div class="flex flex-row space-x-5 justify-between text-mytext">
+                <h2 class="underline text-myblue text-xl">Event Log</h2>
                 <div>
-                    <button class="bg-green-200 hover:bg-green-300 rounded-md p-2" on:click={handleSaveEvents}>Save Events</button>
-                    <button class="bg-slate-200 hover:bg-slate-300 rounded-md p-2" on:click={() => events = []}>Clear Events</button>
+                    <button class="bg-myblue hover:bg-blue-400 text-mybackground rounded-sm p-2" on:click={handleSaveEvents}>Save Events</button>
+                    <button class="bg-slate-200 hover:bg-slate-300 text-mybackground rounded-sm p-2" on:click={() => events = []}>Clear Events</button>
                 </div>
             </div>
-            <table class="w-full text-center">
-                <tr>
+            <table class="w-full text-center border-collapse border-spacing-2">
+                <tr class="text-mypink">
                     {#each ["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"] as header}
-                        <th>{header}</th>
+                        <th class="border">{header}</th>
                     {/each}
                     
                 </tr>
                 {#each events as event}
                     <tr>
                         {#each event.generateArray() as col}
-                            <td>{col === null || col === undefined ? "N/A" : (!isNaN(col) ? Math.round(col*100)/100 : col)}</td>
+                            <td class="border">{col === null || col === undefined ? "N/A" : (!isNaN(col) ? Math.round(col*100)/100 : col)}</td>
                         {/each}
                     </tr>
                 {/each}
