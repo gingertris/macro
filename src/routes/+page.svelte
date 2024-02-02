@@ -16,8 +16,6 @@
 
     let ws: WebSocket;
 
-    $: selectedTeamId = $selectedId < 3 ? 0 : 1;
-
     const onKeyDown = (e:KeyboardEvent) => {
 
         if(e.ctrlKey || e.altKey || e.shiftKey || e.metaKey || e.code == "Tab" || e.code == "Escape") return;
