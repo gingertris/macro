@@ -257,17 +257,17 @@
                     <button class="bg-slate-200 hover:bg-slate-300 text-mybackground rounded-sm p-2" on:click={() => events = []}>Clear Events</button>
                 </div>
             </div>
-            <table class="w-full text-center border-collapse border-spacing-2">
+            <table class="w-full text-center border-collapse border-spacing-2 table-fixed">
                 <tr class="text-mypink">
                     {#each ["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"] as header}
-                        <th class="border">{header}</th>
+                        <th class="border p-2">{header}</th>
                     {/each}
                     
                 </tr>
                 {#each events as event}
                     <tr>
                         {#each event.generateArray() as col}
-                            <td class="border">{col === null || col === undefined ? "N/A" : (!isNaN(col) ? Math.round(col*100)/100 : col)}</td>
+                            <td class="border p-2">{col === null || col === undefined ? "N/A" : (!isNaN(col) ? Math.round(col*100)/100 : col)}</td>
                         {/each}
                     </tr>
                 {/each}
