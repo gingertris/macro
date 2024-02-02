@@ -207,7 +207,7 @@
             {/if}
 
             {:else}
-            <span class="text-red-500">Couldn't connect to SOS. Is it running?</span>
+            <span class="text-red-400">Couldn't connect to SOS. Is it running?</span>
             {/if}
             
         </div>
@@ -222,7 +222,7 @@
                 </div>
               
               {#if !editMode && focussed && !!$gameState}
-                <div class="text-red-500">Recording Keypresses</div>
+                <div class="text-red-400">Recording Keypresses</div>
                 {#if waitingForSecondary}
                 <div class="text-gray-400">Waiting for secondary enter</div>
                 {/if}
