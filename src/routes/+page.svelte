@@ -198,7 +198,7 @@
 
             {#if !!$gameState}
                 <p>
-                    <button class="bg-slate-200 hover:bg-slate-300 rounded-sm p-2" on:click={handleSOSSync}>Sync Names</button> 
+                    <button class="bg-slate-200 hover:bg-slate-300 text-mybackground rounded-sm p-2" on:click={handleSOSSync}>Sync Names</button> 
                 </p>
             {:else}
                 <p>
