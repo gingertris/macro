@@ -39,24 +39,24 @@ export class GameEvent {
         //get event name
         const eventLetter = this.eventCode[0];
         this.event = events.get(eventLetter) ?? "invalid";
-        if(this.event === "invalid") throw new Error(`Invalid event ${eventLetter}`);
+        if(this.event === "invalid") throw new Error(`Invalid event '${eventLetter}'`);
 
         //get outcome
         const outcomeLetter = this.eventCode[1];
         this.outcome = outcomes.get(eventLetter)?.get(outcomeLetter) ?? "invalid";
-        if(this.outcome === "invalid") throw new Error(`Invalid outcome ${outcomeLetter} for event ${this.event}`);
+        if(this.outcome === "invalid") throw new Error(`Invalid outcome '${outcomeLetter}' for event ${this.event}`);
 
 
         console.log(eventCode[0])
         //is secondary needed
         if(eventCode[0] === "c"){ //if 50/50 get other player name
             if(eventCode[2]){
-                if(isNaN(parseInt(eventCode[2]))) throw new Error(`Invalid secondary player selection ${eventCode[2]}`);
+                if(isNaN(parseInt(eventCode[2]))) throw new Error(`Invalid secondary player selection '${eventCode[2]}'`);
                 const secondaryPlayerId: number = parseInt(eventCode[2]) - 1;
                 if(secondaryPlayerId < 0 || secondaryPlayerId > 5) throw new Error(`Secondary player selection must be between 1 and 6`);
                 this.secondary = this.customPlayerNames[secondaryPlayerId];
             } else{
-                throw new Error(`Secondary for event ${eventCode[0]} not found in event code ${eventCode.join("")}`)
+                throw new Error(`Secondary for event '${eventCode[0]}' not found in event code ${eventCode.join("")}`)
             }
         }
 
