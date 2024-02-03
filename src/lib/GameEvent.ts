@@ -34,7 +34,7 @@ export class GameEvent {
         this.eventCode = this.eventCode.map(c => c.toLowerCase());
 
         
-        if(this.eventCode.length === 0) return;
+        if(this.eventCode.length === 0) throw new Error("Empty game code");
     
         //get event name
         const eventLetter = this.eventCode[0];
