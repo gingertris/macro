@@ -238,7 +238,7 @@
                 <div class="text-gray-400">Waiting for secondary enter</div>
                 {/if}
               {/if}
-              {#if editMode && focussed}
+              {#if editMode && focussed && !!$gameState}
               <div class="text-gray-400">
                   Currently editing, not recording keypresses. Click elsewhere to resume recording keypresses.
               </div>
@@ -250,12 +250,9 @@
               {/if}
             </div>
             
-            
-            {#if !editMode}
-                <div>
-                    <p class="text-lg"><code>{eventCode.join("")}</code></p>
-                </div>
-            {/if}
+            <div>
+                <p class="text-lg"><code>{eventCode.join("")}</code></p>
+            </div>
 
             {#if eventError}
                 <div>
