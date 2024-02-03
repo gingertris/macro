@@ -34,7 +34,7 @@ export class GameEvent {
         this.eventCode = this.eventCode.map(c => c.toLowerCase());
 
         
-        if(this.eventCode.length === 0) throw new Error("Empty");
+        if(this.eventCode.length === 0);
     
         //get event name
         const eventLetter = this.eventCode[0];
@@ -51,10 +51,12 @@ export class GameEvent {
         //is secondary needed
         if(eventCode[0] === "c"){ //if 50/50 get other player name
             if(eventCode[2]){
+                if(isNaN(parseInt(eventCode[2]))) throw new Error(`Invalid secondary player selection ${eventCode[2]}`);
                 const secondaryPlayerId: number = parseInt(eventCode[2]) - 1;
+                if(secondaryPlayerId < 0 || secondaryPlayerId > 5) throw new Error(`Secondary player selection must be between 1 and 6`);
                 this.secondary = this.customPlayerNames[secondaryPlayerId];
             } else{
-                throw new Error(`Secondary for event ${eventCode} not found in code.`)
+                throw new Error(`Secondary for event ${eventCode[0]} not found in event code ${eventCode.join("")}`)
             }
         }
 

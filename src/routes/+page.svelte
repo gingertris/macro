@@ -13,6 +13,9 @@
     let currentEvent: GameEvent | null = null;
     let waitingForSecondary = false;
     let SOSPlayerData: Player[] = [];
+    let eventError = "";
+
+    $: if(eventCode.length === 0) eventError = "";
 
     let ws: WebSocket;
 
@@ -36,28 +39,33 @@
         if(["7","8","9","0","F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"].includes(e.key)) return;
 
         if(e.key == "Enter"){
-            if(!waitingForSecondary){
+            try{
+                if(!waitingForSecondary){
                 
-                currentEvent = new GameEvent(eventCode, SOSPlayerData);
-                if(!currentEvent.needsSecondary){
+                    currentEvent = new GameEvent(eventCode, SOSPlayerData);
+                    if(!currentEvent.needsSecondary){
+                        events = [...events, currentEvent];
+                        eventCode = [];    
+                    } else {
+                        waitingForSecondary = true;
+                    }
+                } else{
+                    if(!currentEvent){
+                        waitingForSecondary = false;
+                        return;
+                    }
+                    currentEvent.setSecondary(SOSPlayerData[$selectedId].location);
                     events = [...events, currentEvent];
                     eventCode = [];
-                    return;      
-                } else {
-                    waitingForSecondary = true;
-                    return;
+                    waitingForSecondary = false; 
                 }
-            } else{
-                if(!currentEvent){
-                    waitingForSecondary = false;
-                    return;
-                }
-                currentEvent.setSecondary(SOSPlayerData[$selectedId].location);
-                events = [...events, currentEvent];
-                eventCode = [];
-                waitingForSecondary = false;
-                return;      
+                eventError = "";
+                return;
+            } catch (e: any) {
+                eventError = e.message;
+                return;
             }
+            
         }
 
         if(e.key == "Backspace"){
@@ -214,7 +222,7 @@
 
     </div>
   
-    <div class="flex flex-col space-y-5 text-sm text-mytext" id="events">
+    <div class="flex flex-col space-y-5 text-mytext" id="events">
         <div class="rounded-sm p-2" id="eventcode">
             <div class="flex flex-row space-x-5 ">
                 <div>
@@ -242,7 +250,13 @@
             
             {#if !editMode}
                 <div>
-                    <p><code>{eventCode.join("")}</code></p>
+                    <p class="text-lg"><code>{eventCode.join("")}</code></p>
+                </div>
+            {/if}
+
+            {#if eventError}
+                <div>
+                    <p class="text-red-400">{eventError}</p>
                 </div>
             {/if}
         </div>
@@ -257,7 +271,7 @@
                     <button class="bg-slate-200 hover:bg-slate-300 text-mybackground rounded-sm p-2" on:click={() => events = []}>Clear Events</button>
                 </div>
             </div>
-            <table class="w-full text-center border-collapse border-spacing-2 table-fixed">
+            <table class="w-full text-center text-sm border-collapse border-spacing-2 table-fixed">
                 <tr class="text-mypink">
                     {#each ["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"] as header}
                         <th class="border p-2">{header}</th>
