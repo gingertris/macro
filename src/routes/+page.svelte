@@ -256,7 +256,7 @@
 
             {#if eventError}
                 <div>
-                    <p class="text-red-400 text-sm">Error: {eventError}</p>
+                    <p class="text-red-400 text-sm">{eventError}</p>
                 </div>
             {/if}
         </div>
