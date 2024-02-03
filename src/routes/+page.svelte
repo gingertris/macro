@@ -222,8 +222,8 @@
 
     </div>
   
-    <div class="flex flex-col space-y-5 text-mytext" id="events">
-        <div class="rounded-sm p-2" id="eventcode">
+    <div class="flex flex-col space-y-2 text-mytext" id="events">
+        <div class="rounded-sm p-2 space-y-2" id="eventcode">
             <div class="flex flex-row space-x-5 ">
                 <div>
                     <h2 class="text-myblue text-xl">Current Event Code</h2>
@@ -256,7 +256,7 @@
 
             {#if eventError}
                 <div>
-                    <p class="text-red-400">{eventError}</p>
+                    <p class="text-red-400 text-sm">Error: {eventError}</p>
                 </div>
             {/if}
         </div>
