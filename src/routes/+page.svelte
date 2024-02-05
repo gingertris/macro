@@ -4,6 +4,7 @@
     import { GameEvent } from "$lib/GameEvent";
 	import { onMount } from "svelte";
 	import type { Player } from "$lib/types";
+	import { columns } from "$lib";
 	
     let editMode = false;
     let connected = false;
@@ -158,7 +159,7 @@
     } 
 
     const handleSaveEvents = () => {
-        let content = [["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"]];
+        let content = [columns];
         for (let event of events){
             content.push(event.generateArray());
         }
@@ -273,15 +274,15 @@
             </div>
             <table class="w-full text-center text-sm border-collapse border-spacing-2 table-fixed">
                 <tr class="text-mypink">
-                    {#each ["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Timestamp"] as header}
+                    {#each columns as header}
                         <th class="border p-2">{header}</th>
                     {/each}
                     
                 </tr>
                 {#each events as event}
                     <tr>
-                        {#each event.generateArray() as col}
-                            <td class="border p-2">{col === null || col === undefined ? "N/A" : (!isNaN(col) ? Math.round(col*100)/100 : col)}</td>
+                        {#each event.generateArray() as col, i}
+                            <td class="border p-2">{col === null || col === undefined ? "N/A" : (i===columns.indexOf("Assisted") ? (!!col ? "Yes" : "No") : (!isNaN(col) ? Math.round(col*100)/100 : col))}</td>
                         {/each}
                     </tr>
                 {/each}

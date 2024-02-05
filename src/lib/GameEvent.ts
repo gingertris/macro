@@ -14,6 +14,7 @@ export class GameEvent {
     private event: string;
     private outcome: string;
     private timestamp: number;
+    private assisted: boolean | null;
     needsSecondary: boolean;
 
     constructor(eventCode: string[], SOSPlayerData: Player[]){
@@ -25,6 +26,7 @@ export class GameEvent {
         this.player = SOSPlayerData[this.selectedId];
         this.needsSecondary = false;
         this.timestamp = this.gameState.game.elapsed;
+        this.assisted = null;
   
 
         //overwrite SOS name with custom name
@@ -60,6 +62,23 @@ export class GameEvent {
             }
         }
 
+        if(eventCode[0] === "g"){
+            if(eventCode[2]){
+                switch(eventCode[2]){
+                    case "y":
+                        this.assisted = true;
+                        break;
+                    case "n":
+                        this.assisted = false;
+                        break;
+                    default:
+                        throw new Error(`Invalid secondary ${eventCode[2]} for event type ${this.event} (must be 'y' or 'n')`);
+                }
+            } else {
+                throw new Error(`Secondary for event '${eventCode[0]}' not found in event code ${eventCode.join("")}`)
+            }
+        }
+
         if(eventCode[0] === "u"){
             this.needsSecondary = true;
         }
@@ -78,6 +97,7 @@ export class GameEvent {
             event: this.event,
             outcome: this.outcome,
             secondary: this.secondary,
+            assisted: this.assisted,
             timestamp: this.timestamp
         }
 
@@ -94,7 +114,7 @@ export class GameEvent {
         } else if (this.event === "Challenge (50/50)"){
             secondaryArray = [(this.secondary as string),null,null,null]
         }
-        return [team, opponentTeam, this.player.name, this.player.boost, this.player.location.X, this.player.location.Y, this.player.location.Z, this.event, this.outcome, ...secondaryArray, this.timestamp]
+        return [team, opponentTeam, this.player.name, this.player.boost, this.player.location.X, this.player.location.Y, this.player.location.Z, this.event, this.outcome, ...secondaryArray, this.assisted ? 1 : 0, this.timestamp]
     }
 
     private _getTeamNames (playerId: number) {

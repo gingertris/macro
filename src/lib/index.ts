@@ -1,1 +1,2 @@
 // place files you want to import through the `$lib` alias in this folder.
+export const columns = ["Team","Opponent Team","Player","Boost","X of player","Y of player","Z of player","Event","Outcome","Secondary Player","Secondary X","Secondary Y","Secondary Z", "Assisted", "Timestamp"];
