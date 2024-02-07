@@ -223,9 +223,10 @@
             <span class="text-red-400">Couldn't connect to SOS. Is it running?</span>
             {/if}
 
-            <div class="justify-self-end">
-                <Help/>
+            <div>
+               <Help /> 
             </div>
+            
                 
             
         </div>
