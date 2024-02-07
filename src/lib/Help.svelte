@@ -34,7 +34,7 @@
         
         <div class="space-y-2 text-sm">
             <h2 class="text-xl underline">Prerequisites</h2>
-            <p>Make sure that the SOS plugin for BakkesMod is installed. This can be found on the <a href="SOS GitLab repository.">SOS GitLab repository.</a></p>   
+            <p>Make sure that the SOS plugin for BakkesMod is installed. This can be found on the <a href="https://gitlab.com/bakkesplugins/sos/sos-plugin/-/releases" class="underline">SOS GitLab repository.</a></p>   
         </div>
 
         <div class="space-y-2 text-sm">
