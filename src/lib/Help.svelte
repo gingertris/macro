@@ -32,12 +32,12 @@
 
     <div id="content" class="p-5 space-y-5 bg-slate-50">
         
-        <div class="space-y-2">
+        <div class="space-y-2 text-sm">
             <h2 class="text-xl underline">Prerequisites</h2>
-            <p class="text-sm">Make sure that the SOS plugin for BakkesMod is installed. This can be found on the <a href="SOS GitLab repository.">SOS GitLab repository.</a></p>   
+            <p>Make sure that the SOS plugin for BakkesMod is installed. This can be found on the <a href="SOS GitLab repository.">SOS GitLab repository.</a></p>   
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-2 text-sm">
             <h2 class="text-xl underline">How to use</h2>
             <p>Make sure Rocket League is running with the SOS BakkesMod plugin enabled.</p>
             <p>You can press the <b>Sync Names</b> button to automatically enter the player names and team names from the replay data.</p>
@@ -48,7 +48,7 @@
 
         </div>
         
-        <div class="space-y-2">
+        <div class="space-y-2 text-sm">
             <h2 class="text-xl underline">Keybinds and Events</h2>
             {#each [...events] as [eventKey, eventValue]}
                 <hr>
@@ -62,7 +62,7 @@
             {/each}
         </div>
         
-        <div class="space-y-2">
+        <div class="space-y-2 text-sm">
             <h2 class="text-xl underline">Secondary Values</h2>
             <p>The <b>Challenge (50/50)</b>, <b>Goal</b>, and <b>Uncontested Play</b> events all have secondary values.</p>
 
