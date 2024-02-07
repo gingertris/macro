@@ -222,6 +222,11 @@
             {:else}
             <span class="text-red-400">Couldn't connect to SOS. Is it running?</span>
             {/if}
+
+            <div class="justify-self-end">
+                <Help/>
+            </div>
+                
             
         </div>
 
@@ -250,11 +255,6 @@
                     Cannot record macros - no game state was found. Please launch a replay file with SOS enabled.
                 </div>
               {/if}
-
-              <div class="justify-self-end">
-                <Help/>
-              </div>
-                
               
             </div>
             
