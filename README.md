@@ -72,6 +72,10 @@ The **Challenge (50/50)** and **Uncontested Play** events both have secondary va
 
 Enter the number of the player after the event and outcome in the macro. The secondary player's name will be recorded.
 
+### Goal
+
+Enter `y` or `n` at the end of the macro to denote whether the goal was assisted or not.
+
 ### Uncontested play
 
 When you first press enter, the initial XYZ coordinates of the selected player will be recorded. Continue watching the replay until the play is over, then press enter for a second time to log the XYZ coordinates of the selected player at the end of the play. Both XYZ values will be recorded, with the latter being the secondary value.

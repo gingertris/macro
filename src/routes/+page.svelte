@@ -5,6 +5,7 @@
 	import { onMount } from "svelte";
 	import type { Player } from "$lib/types";
 	import { columns } from "$lib";
+	import Help from "$lib/Help.svelte";
 	
     let editMode = false;
     let connected = false;
@@ -228,7 +229,7 @@
   
     <div class="flex flex-col space-y-2 text-mytext" id="events">
         <div class="rounded-sm p-2 space-y-2" id="eventcode">
-            <div class="flex flex-row space-x-5 ">
+            <div class="flex flex-row space-x-5 justify-items-normal ">
                 <div>
                     <h2 class="text-myblue text-xl">Current Event Code</h2>
                 </div>
@@ -249,6 +250,12 @@
                     Cannot record macros - no game state was found. Please launch a replay file with SOS enabled.
                 </div>
               {/if}
+
+              <div class="justify-self-end">
+                <Help/>
+              </div>
+                
+              
             </div>
             
             <div>
