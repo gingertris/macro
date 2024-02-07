@@ -21,7 +21,7 @@
 <dialog id="modal" class="rounded-sm  max-w-screen-md">
 
 
-    <div id="header" class="sticky top-0 bg-slate-400 px-5 pt-5 space-y-3">
+    <div id="header" class="sticky top-0 bg-slate-300 px-5 pt-5 space-y-3">
         <button id="hideModal" class="bg-mypink hover:bg-pink-400 text-mybackground rounded-sm p-2">Close</button>
         <h1 class="text-2xl">Help</h1>
 
@@ -30,7 +30,7 @@
 
 
 
-    <div id="content" class="p-5 space-y-5 bg-slate-200">
+    <div id="content" class="p-5 space-y-5 bg-slate-50">
         
         <div class="space-y-2">
             <h2 class="text-xl underline">Prerequisites</h2>
