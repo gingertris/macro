@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        mybackground: '#272729',
+        mybackground: '#151516',
         myblue: '#6ac3f2',
         mypink: '#e986ae',
         mytext: '#e7e7e7'
